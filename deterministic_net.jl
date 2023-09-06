@@ -23,7 +23,6 @@ function find_fixed_point(;input_current=1.0,time_delta=0.1,divisions=100000,
         fixed_point_estimate = mean(sim_voltages,dims=2)
         derivative = [power_rate_derivative(fixed_point_estimate[i],0.3,2,voltage_thresholds[i,1]) for i in eachindex(fixed_point_estimate)]
         matrix = inv(diagm(voltage_time_constants))*(-1*I + weights*diagm(derivative))
-        display(matrix)
         jacobian_stability = eigvals(matrix)
     end
     if plt
@@ -59,13 +58,13 @@ function power_rate_derivative(v,k,power,v₀)
         return k*power*(v-v₀)^(power-1)
     end
 end
-α = 1.1
-β = 1.1
+#α = 1.1
+#β = 1.1
 #display(test_fixed(10,β,α))
 #fixed_point_list = []
-v₀_r1e,v₀_r1i,v₀_r2e,v₀_r2i = [-68.1523, -68.0286, -68.5274, -68.4521]#2*100*(rand(Float64,4) - 0.5*ones(4)) + [-70.0,-70.0,-70.0,-70.0] #2*multiplicative_factor*(rand(Float64,4) - 0.5*ones(4)) - 
-fixed_point_0 = find_fixed_point(v₀_r1e=v₀_r1e,v₀_r1i=v₀_r1i,v₀_r2e=v₀_r2e,v₀_r2i=v₀_r2i,w_r1ir2e=β, w_r1er2e=α,w_r2er1e=1.1,w_r2ir1e=1.1,plt=true,show_stability=true)
-display(fixed_point_0)
+#v₀_r1e,v₀_r1i,v₀_r2e,v₀_r2i = [-68.1523, -68.0286, -68.5274, -68.4521]#2*100*(rand(Float64,4) - 0.5*ones(4)) + [-70.0,-70.0,-70.0,-70.0] #2*multiplicative_factor*(rand(Float64,4) - 0.5*ones(4)) - 
+#fixed_point_0 = find_fixed_point(v₀_r1e=v₀_r1e,v₀_r1i=v₀_r1i,v₀_r2e=v₀_r2e,v₀_r2i=v₀_r2i,w_r1ir2e=β, w_r1er2e=α,w_r2er1e=1.1,w_r2ir1e=1.1,plt=true,show_stability=true)
+#display(fixed_point_0)
 #display(fixed_point_0)
 #weights = [1.25 -0.65  1.0   -0.0;#
 #           1.2   -0.5   0.5   -0.0;

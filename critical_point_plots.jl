@@ -222,7 +222,7 @@ function plot_critical_across_h(;ei = 1.0,β=0.5,hs=LinRange(0.0,10.0,30),iterat
     v_sub_plots = plot(r1e_v_stability_plot,r1i_v_stability_plot,r2e_v_stability_plot,r2i_v_stability_plot,layout=(2,2))
     beginning_h = hs[begin]
     ending_h = hs[end]
-    combined_plots = plot(v_sub_plots,plot_title="Critical Points Voltage Across h ∈ [$beginning_h,$ending_h] with fixed β=$β,E/I=$(α/β)",
+    combined_plots = plot(v_sub_plots,plot_title="Critical Points Voltage Across h ∈ [$beginning_h,$ending_h] with fixed β=$β,E/I=$(ei)",
     thickness_scaling=1,titlefontsize=10,size=(700,600))
     savefig(combined_plots,voltage_saveloc)
     #plots rate
@@ -231,7 +231,7 @@ function plot_critical_across_h(;ei = 1.0,β=0.5,hs=LinRange(0.0,10.0,30),iterat
     r2e_r_stability_plot = plot_quadrant(stable_rate_dicts,unstable_rate_dicts;quadrant=3,color=:orange,xlabel="h",ylabel="Critical Point Rate")
     r2i_r_stability_plot = plot_quadrant(stable_rate_dicts,unstable_rate_dicts;quadrant=4,color=:purple,xlabel="h",ylabel="Critical Point Rate")
     r_sub_plots = plot(r1e_r_stability_plot,r1i_r_stability_plot,r2e_r_stability_plot,r2i_r_stability_plot,layout=(2,2))
-    combined_plots = plot(r_sub_plots,plot_title="Critical Points Rate Across h ∈ [$beginning_h,$ending_h] with fixed β=$β,E/I=$(α/β)",
+    combined_plots = plot(r_sub_plots,plot_title="Critical Points Rate Across h ∈ [$beginning_h,$ending_h] with fixed β=$β,E/I=$(ei)",
     thickness_scaling=1,titlefontsize=10,size=(700,600))
     savefig(combined_plots,rate_saveloc)
 end
@@ -299,6 +299,10 @@ function plot_critical_number_across_ei_h(;β=1.1,hs=LinRange(0.0,20.0,200),ei_r
     savefig(stable_plot,stable_saveloc)
     savefig(unstable_plot,unstable_saveloc)
 end
+function find_fixed_points_ei(;ei=1.0,β=1.1,h=3.0,iterations=1000)
+    voltage_sols,stability_eigs,is_stable_vec,rate_sols =find_fixed_points(;α=ei*β,β=β,h=h,iterations=iterations)
+    return voltage_sols,stability_eigs,is_stable_vec,rate_sols
+end
 #plots for β=0.5
 #β = 0.5
 #plot_critical_across_ei(β=β,h=0.0,voltage_saveloc="./critical_plots/b05/EI_critical_voltage_h10.png",rate_saveloc="./critical_plots/b05/EI_critical_rate_h10.png")
@@ -306,9 +310,13 @@ end
 #plot_critical_number_across_ei_h(β=β,hs = LinRange(0.0, 20.0, 200), ei_ratios = LinRange(0.1, 2.0, 200),max_critical_points = 2, stable_saveloc = "./critical_plots/b05/stable_ei_hs_plots.png", unstable_saveloc = "./critical_plots/b05/unstable_ei_hs_plots.png")
 #plots for β = 1.1
 β = 1.1
-#plot_critical_across_ei(β=β,h=0.0,voltage_saveloc="./critical_plots/EI_critical_voltage_h10.png",rate_saveloc="./critical_plots/EI_critical_rate_h10.png")
-plot_critical_across_h(β=β,α=1.32,voltage_saveloc="./critical_plots/h_critical_voltage_α132.png",rate_saveloc="./critical_plots/h_critical_rate_α132.png")
-plot_critical_across_h(β=β,α=1.65,voltage_saveloc="./critical_plots/h_critical_voltage_α165.png",rate_saveloc="./critical_plots/h_critical_rate_α165.png")
+#plot_critical_across_ei(β=β,h=5.0,voltage_saveloc="./milestone_plots/transition/EI_critical_voltage.png",rate_saveloc="./milestone_plots/transition/EI_critical_rate.png")
+#plot_critical_across_h(β=β,ei=0.5,voltage_saveloc="./milestone_plots/single_stable/critical_volt_single_stable.png",rate_saveloc="./milestone_plots/single_stable/critical_rate_single_stable.png")
+#plot_critical_across_h(β=β,ei=1.0,voltage_saveloc="./milestone_plots/multi_stable/critical_volt_multi_stable.png",rate_saveloc="./milestone_plots/multi_stable/critical_rate_multi_stable.png")
+#plot_critical_across_h(β=β,ei=1.3,voltage_saveloc="./milestone_plots/partial_stable/critical_volt_partial_stable.png",rate_saveloc="./milestone_plots/partial_stable/critical_rate_partial_stable.png")
+#plot_critical_across_h(β=β,ei=1.5,voltage_saveloc="./milestone_plots/unstable/critical_volt_unstable.png",rate_saveloc="./milestone_plots/unstable/critical_rate_unstable.png")
+display(find_fixed_points_ei(ei=1.5,β=β,h=5.0)[2])
+#plot_critical_across_h(β=β,α=1.65,voltage_saveloc="./critical_plots/h_critical_voltage_α165.png",rate_saveloc="./critical_plots/h_critical_rate_α165.png")
 
 #plot_critical_number_across_ei_h(β=β,hs = LinRange(0.0, 20.0, 200), ei_ratios = LinRange(0.1, 2.0, 200),max_critical_points = 2, stable_saveloc = "./critical_plots/b11/stable_ei_hs_plots.png", unstable_saveloc = "./critical_plots/b11/unstable_ei_hs_plots.png")
 #plots for β = 1.5
